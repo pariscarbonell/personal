@@ -48,7 +48,18 @@ def relationship_status(from_member, to_member, social_graph):
     '''
     # Replace `pass` with your code.
     # Stay within the function. Only use the parameters as input. The function should return your answer.
-    pass
+  if to_member in social_graph.get(from_member, []):
+    if from_member in social_graph.get(to_member, []):
+      return "friends"
+    else:
+      return "follower"
+  elif from_member in social_graph.get(to_member, []):
+    return "followed by"
+  # No relationship found
+  else:
+    return "no relationship"
+
+
 
 
 def tic_tac_toe(board):
@@ -77,7 +88,37 @@ def tic_tac_toe(board):
     '''
     # Replace `pass` with your code.
     # Stay within the function. Only use the parameters as input. The function should return your answer.
-    pass
+  board_size = len(board)
+
+  for i in range(board_size):
+    row_winner = check_winner(board[i])
+    if row_winner != " ":
+      return row_winner
+
+    column = [row[i] for row in board]
+    column_winner = check_winner(column)
+    if column_winner != " ":
+      return column_winner
+
+  if board_size == board_size**0.5:
+    diagonal_winner = check_winner([board[i][i] for i in range(board_size)])
+    if diagonal_winner != " ":
+      return diagonal_winner
+
+    anti_diagonal_winner = check_winner([board[i][board_size - 1 - i] for i in range(board_size)])
+    if anti_diagonal_winner != " ":
+      return anti_diagonal_winner
+
+  if all(cell != " " for row in board for cell in row):
+    return "TIE"
+
+  return "NO WINNER"
+
+def check_winner(row):
+    
+  filtered_row = [cell for cell in row if cell != " "]
+  return filtered_row[0] if len(set(filtered_row)) == 1 and filtered_row[0] != " " else " "
+
 
 def eta(first_stop, second_stop, route_map):
     '''ETA.
@@ -110,4 +151,8 @@ def eta(first_stop, second_stop, route_map):
     '''
     # Replace `pass` with your code.
     # Stay within the function. Only use the parameters as input. The function should return your answer.
-    pass
+  if (first_stop, second_stop) not in route_map and (second_stop, first_stop) not in route_map:
+    raise ValueError(f"Route not found between {first_stop} and {second_stop}")
+
+  travel_time = route_map.get((first_stop, second_stop), route_map[(second_stop, first_stop)])["travel_time_mins"]
+  return travel_time
